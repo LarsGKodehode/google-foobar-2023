@@ -33,7 +33,7 @@ def transcode_string(mapping: dict, message: str) -> str:
   """
   Transcodes a string using the provided mapping
   - If the mapping does not contain a char (a partial map)
-     the original char is used
+    the original char is used
   - If the mapping is non-unique data is lost
 
   Args:
