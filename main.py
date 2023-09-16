@@ -1,40 +1,68 @@
-def create_char_map(start_char, end_char):
+def create_char_mapping(start_char: str, end_char: str):
+  """
+  Create a character mapping dictionary between start_char and end_char.
+  
+  Args:
+    start_char (str): The starting character.
+    end_char (str): The ending character.
+  
+  Returns:
+    dict: A dictionary with character mappings.
+  
+  Raises:
+    ValueError: If start_char is not before end_char in the Unicode sequence.
+  """
+
   char_mapping = {}
   start = ord(start_char)
   end = ord(end_char)
 
   if not (start < end):
-    # I'a unfamiliar with Python error handling best
+    # I'am unfamiliar with Python error handling best
     # practices so this might be improved upon
     raise ValueError(f"Char {start_char} must come before {end_char}")
   
-  # range stop index is exclusive, so add 1
+  # range end index is exclusive, so add 1
   for origin in range(start, end + 1):
     to = end - (origin - start)
     char_mapping[chr(origin)] = chr(to)
 
   return char_mapping
 
-# This should have some documentation, uncertain how to best do this in Python
-# 1. If the mapping does not contain a char (a parital map), we use the original char
-# 2. If the mapping is non-unique we might lose data
-def transcode_string(mapping, message):
-  # While list comprehension is ok, inlcuding conditionals gets messy
-  return ''.join([mapping[char] if char in mapping else char for char in list(message)])
+def transcode_string(mapping: dict, message: str) -> str:
+  """
+  Transcodes a string using the provided mapping
+  - If the mapping does not contain a char (a partial map)
+     the original char is used
+  - If the mapping is non-unique data is lost
 
-lower_case_mapping = create_char_map('a', 'z')
-upper_case_mapping = create_char_map('A', 'Z')
+  Args:
+    mapping: A dictionary containing mappings to use
+    message: the input message
+  
+  Returns:
+    str: The transcoded message
+  """
+  
+  # Loop through each char in message
+  # and append the associated mapping value
+  # or the character if no mapping exists
+  result = []
+  for char in message:
+    if char in mapping:
+      result.append(mapping[char])
+    else:
+      result.append(char)
 
+  return ''.join(result)
+
+# Create mappings
+lower_case_mapping = create_char_mapping('a', 'z')
+upper_case_mapping = create_char_mapping('A', 'Z')
 mapping = {**lower_case_mapping, **upper_case_mapping}
 
-
-# Simple decorater
-def encode(message):
-  return transcode_string(mapping, message)
-
-
+# Test Case
 string = "Hello World"
-
 print(string)
-print(encode(string))
-print(encode(encode(string)))
+print(transcode_string(mapping, string))
+print(transcode_string(mapping, transcode_string(mapping, string)))
