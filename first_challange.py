@@ -56,13 +56,15 @@ def transcode_string(mapping: dict, message: str) -> str:
 
   return ''.join(result)
 
-# Create mappings
-lower_case_mapping = create_char_mapping('a', 'z')
-upper_case_mapping = create_char_mapping('A', 'Z')
-mapping = {**lower_case_mapping, **upper_case_mapping}
 
-# Test Case
-string = "Hello World"
-print(string)
-print(transcode_string(mapping, string))
-print(transcode_string(mapping, transcode_string(mapping, string)))
+def test():
+  # Create mappings
+  lower_case_mapping = create_char_mapping('a', 'z')
+  upper_case_mapping = create_char_mapping('A', 'Z')
+  mapping = {**lower_case_mapping, **upper_case_mapping}
+
+  # Test Case
+  string = "Hello World"
+  print(string)
+  print(transcode_string(mapping, string))
+  print(transcode_string(mapping, transcode_string(mapping, string)))
